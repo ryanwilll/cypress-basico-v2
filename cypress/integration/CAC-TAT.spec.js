@@ -1,4 +1,5 @@
 /// <reference types="Cypress" />
+import { faker } from '@faker-js/faker';
 
 describe('Central de Atendimento ao Cliente TAT', () => {
   beforeEach(() => {
@@ -30,7 +31,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
   });
 
   it('campo numero de telefone permanece vazio após inserir valor não numérico', () => {
-    cy.get('#phone').type('abc').should('have.value', '');
+    cy.get('#phone').type('abc', { delay: 200 }).should('have.value', '');
   });
 
   it('exibe mensagem de erro quando o telefone se torna obrigatório mas não é preenchido antes do envio do formulário', () => {
@@ -104,5 +105,10 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .then((numeroItens) => {
         cy.get('#product').select(Cypress._.random(1, numeroItens));
       });
+  });
+
+  it('digitar texto em todos os campos text', () => {
+    cy.generateFakerInfo();
+    cy.contains('button', 'Enviar').click();
   });
 });

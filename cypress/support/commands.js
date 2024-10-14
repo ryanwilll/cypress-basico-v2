@@ -1,3 +1,5 @@
+import { faker } from '@faker-js/faker';
+
 Cypress.Commands.add('fillMandatoryFieldsAndSubmit', () => {
   cy.get('#firstName').type('João', { delay: 0 });
   cy.get('#lastName').type('da Silva Sauro', { delay: 0 });
@@ -16,3 +18,10 @@ Cypress.Commands.add(
     cy.contains('button', 'Enviar').click();
   },
 );
+
+Cypress.Commands.add('generateFakerInfo', () => {
+  cy.get('#firstName').type(faker.name.firstName(), { delay: 0 });
+  cy.get('#lastName').type(faker.name.lastName(), { delay: 0 });
+  cy.get('#email').type(faker.internet.email(), { delay: 0 });
+  cy.get('#open-text-area').type(faker.lorem.paragraph(20), { delay: 0 });
+});
