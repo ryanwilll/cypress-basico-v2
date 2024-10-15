@@ -111,4 +111,62 @@ describe('Central de Atendimento ao Cliente TAT', () => {
     cy.generateFakerInfo();
     cy.contains('button', 'Enviar').click();
   });
+
+  it('marca o tipo de atendimento "Feedback"', () => {
+    cy.get('input[type="radio"]')
+      .check('feedback')
+      .should('have.value', 'feedback');
+  });
+
+  it('marca cada tipo de atendimento', () => {
+    cy.get('input[type="radio"]')
+      .should('have.length', 3)
+      .each(($el) => {
+        cy.wrap($el).check().should('be.checked');
+      });
+  });
+
+  it('marca ambos checkboxes, depois desmarca o último', () => {
+    cy.get('input[type="checkbox"]')
+      .check()
+      .should('be.checked')
+      .last()
+      .uncheck()
+      .should('not.be.checked');
+  });
+
+  it('seleciona um arquivo da pasta fixtures', () => {
+    cy.get('input[type="file"]')
+      .selectFile('cypress/fixtures/example.json')
+      .then((input) => {
+        expect(input[0].files[0].name).to.equal('example.json');
+      });
+  });
+
+  it('seleciona um arquivo simulando um drag-and-drop', () => {
+    cy.get('input[type="file"]')
+      .should('not.have.value')
+      .selectFile('cypress/fixtures/example.json', { action: 'drag-drop' })
+      .should((input) => {
+        expect(input[0].files[0].name).to.eq('example.json');
+      });
+  });
+
+  it('seleciona um arquivo utilizando uma fixture para a qual foi dada um alias', () => {
+    cy.fixture('example.json').as('arquivoExemplo');
+    cy.get('input[type="file"]')
+      .selectFile('@arquivoExemplo')
+      .should((input) => {
+        expect(input[0].files[0].name).to.eq('example.json');
+      });
+  });
+
+  it('verifica que a política de privacidade abre em outra aba sem a necessidade de um clique', () => {
+    cy.get('#privacy > a').should('have.attr', 'target', '_blank');
+  });
+
+  it('acessa a página da política de privacidade removendo o target e então clicando no link', () => {
+    cy.get('#privacy > a').invoke('removeAttr', 'target').click();
+    cy.contains('Talking About Testing').should('be.visible');
+  });
 });
