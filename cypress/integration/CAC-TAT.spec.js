@@ -212,7 +212,7 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       .should('not.be.visible');
   });
 
-  it('faz uma requisição HTTP', () => {
+  it.only('faz uma requisição HTTP', () => {
     cy.request({
       url: 'https://cac-tat.s3.eu-central-1.amazonaws.com/index.html',
       method: 'GET',
@@ -220,6 +220,18 @@ describe('Central de Atendimento ao Cliente TAT', () => {
       expect(response.status).to.eq(200);
       expect(response.statusText).to.eq('OK');
       expect(response.body).contain('CAC TAT');
+    });
+  });
+
+  it.only('faz uma requisição HTTP', () => {
+    cy.request(
+      'https://cac-tat.s3.eu-central-1.amazonaws.com/index.html',
+    ).should((response) => {
+      const { status, statusText, body } = response;
+
+      expect(status).to.eq(200);
+      expect(statusText).to.eq('OK');
+      expect(body).to.include('CAC TAT');
     });
   });
 });
